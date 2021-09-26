@@ -6,7 +6,7 @@ import base64
 
 
 def decrypto(text):
-    # print(text.decode())
+    print(text.decode())
     # 数据base64解码
     text = base64.b64decode(text.decode())
     # key 为云之家智能审批开发者选项提供的
