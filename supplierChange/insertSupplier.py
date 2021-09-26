@@ -61,7 +61,10 @@ def createSupplier(data):
                         "FNumber": depart_group[datas["Ra_3"]]
                     },
                     "FBaseInfo": {
-                        "FAddress": datas["Te_2"]
+                        "FAddress": datas["Te_2"],
+                        "FSupplierClassify": {
+                            "FNumber": "GYSFL001"
+                        },
                     },
                     "FFinanceInfo": {
                         "FPayCurrencyId": {

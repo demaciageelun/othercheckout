@@ -11,7 +11,7 @@ from flask import request
 from RDpurchase import rd_material, rd_supplier, rd_mater_supp
 from xsMaterial import xs_Material
 from cptyjjswjggtzd import cpty_material
-from supplierChange import insertSupplier
+from supplierChange import insertSupplier,updateSupplier
 
 unitnode = {
     '升': 'L',
@@ -254,6 +254,15 @@ def newSupplier():
     data = json.loads(decrypto.decrypto(request.get_data()))
     # 处理逻辑
     insertSupplier.createSupplier(data)
+    resu = {"success": "true"}
+    return json.dumps(resu, ensure_ascii=False)
+
+# 接收云之家更新供应商申请单，并写入erp
+@server.route('/updateSupplier', methods=['get', 'post'])
+def updateSup():
+    data = json.loads(decrypto.decrypto(request.get_data()))
+    # 处理逻辑
+    updateSupplier.updateSup(data)
     resu = {"success": "true"}
     return json.dumps(resu, ensure_ascii=False)
 
