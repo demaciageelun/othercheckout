@@ -1,4 +1,4 @@
-import interface
+import interface, savedata, searchdata
 
 
 def updateSup(data):
@@ -6,12 +6,14 @@ def updateSup(data):
     print(data)
     org_data = data["data"]["formInfo"]["detailMap"]["Dd_0"]["widgetValue"]
     for datas in org_data:
-        interface_data = {"Number": datas["Te_1"]}
+        # filter_string = "CreateOrgId": "1", "Number": datas["Te_1"]
+        filter_string = "FUseOrgId = 1 and FNumber = '" + datas["Te_1"] + "'"
         # #     获取物料在数据库中的内码id
-        pk_ids = interface.getPkIds("BD_Supplier", interface_data)
-        {
+        pk_ids = searchdata.getdata("BD_Supplier", "FSupplierId", filter_string, 2000, 0)
+        print(pk_ids)
+        update_data = {
             "Model": {
-                "FSupplierId": pk_ids,
+                "FSupplierId": pk_ids[0][0],
                 "FBaseInfo": {
                     "FSupplierClassify": {
                         "FNumber": "GYSFL002"
@@ -19,3 +21,4 @@ def updateSup(data):
                 }
             }
         }
+        savedata.save("BD_Supplier", update_data)
