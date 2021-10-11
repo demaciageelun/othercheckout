@@ -14,8 +14,8 @@ def supplier_inf(keyword, pageSize, curPage):
     suppliers = searchdata.getdata("BD_Supplier", "FName", filters, pageSize,
                                    pageSize * (curPage - 1))
     data_list = []
-    for sup in suppliers:
-        data = {"supplier": sup[0]}
+    for index, sup in suppliers:
+        data = {"id": index, "supplier": sup[0]}
         data_list.append(data)
     resu = {
         "success": True,
