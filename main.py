@@ -11,7 +11,9 @@ from flask import request
 from RDpurchase import rd_material, rd_supplier, rd_mater_supp
 from xsMaterial import xs_Material
 from cptyjjswjggtzd import cpty_material
-from supplierChange import insertSupplier,updateSupplier
+from supplierChange import insertSupplier, updateSupplier
+from qtwldw import save_qtwldw
+from gysfksq import search_Info
 
 unitnode = {
     '升': 'L',
@@ -228,6 +230,7 @@ def xsMaterial():
         resu = xs_Material.material("", 7, 1)
     return json.dumps(resu, ensure_ascii=False)
 
+
 # 售后业务委托书的物料列表
 @server.route('/cptymaterial', methods=['get', 'post'])
 def cptyMaterial():
@@ -248,6 +251,7 @@ def cptyMaterial():
         resu = cpty_material.material_inf("", 7, 1)
     return json.dumps(resu, ensure_ascii=False)
 
+
 # 接收云之家新增供应商申请单，并写入erp
 @server.route('/newSupplier', methods=['get', 'post'])
 def newSupplier():
@@ -257,6 +261,7 @@ def newSupplier():
     resu = {"success": "true"}
     return json.dumps(resu, ensure_ascii=False)
 
+
 # 接收云之家更新供应商申请单，并写入erp
 @server.route('/updateSupplier', methods=['get', 'post'])
 def updateSup():
@@ -264,6 +269,37 @@ def updateSup():
     # 处理逻辑
     updateSupplier.updateSup(data)
     resu = {"success": "true"}
+    return json.dumps(resu, ensure_ascii=False)
+
+
+# 接收云之家新增其他往来单位申请单，并写入erp
+@server.route('/newOtherCorrespondents', methods=['get', 'post'])
+def newOtherCor():
+    data = json.loads(decrypto.decrypto(request.get_data()))
+    # 处理逻辑
+    save_qtwldw.save(data)
+    resu = {"success": "true"}
+    return json.dumps(resu, ensure_ascii=False)
+
+
+# 供应商付款申请获取其他往来单位信息
+@server.route('/otherCompany', methods=['get', 'post'])
+def otherCompany():
+    data = request.get_data()
+    datas = data.decode('utf8')
+    jsondata = json.loads(datas)
+    try:
+        # 搜索关键字
+        keyword = jsondata["keyword"]
+        # 每页数据，目前固定
+        pageSize = jsondata["pageSize"]
+        # 当前页
+        curPage = jsondata["curPage"]
+        # 物料分组
+        resu = search_Info.other_company(keyword, pageSize, curPage)
+    except Exception as e:
+        print(e)
+        resu = search_Info.other_company("", 7, 1)
     return json.dumps(resu, ensure_ascii=False)
 
 
