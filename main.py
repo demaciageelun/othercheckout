@@ -14,7 +14,7 @@ from cptyjjswjggtzd import cpty_material
 from supplierChange import insertSupplier, updateSupplier
 from qtwldw import save_qtwldw
 from gysfksq import search_Info
-
+from wbsp import sc02
 unitnode = {
     '升': 'L',
     'Pcs': 'Pcs',
@@ -301,6 +301,28 @@ def otherCompany():
         print(e)
         resu = search_Info.other_company("", 7, 1)
     return json.dumps(resu, ensure_ascii=False)
+
+
+# 接收云之家新增其他往来单位申请单，并写入erp
+@server.route('/test', methods=['get', 'post'])
+def test():
+    data = json.loads(decrypto.decrypto(request.get_data()))
+    # 处理逻辑
+    print(data)
+    resu = {"success": "true"}
+    return json.dumps(resu, ensure_ascii=False)
+
+
+@server.route('/wbspSc02', methods=['get', 'post'])
+def wbspSc02():
+    data = json.loads(decrypto.decrypto(request.get_data()))
+    # 处理逻辑
+    print(data)
+    sc02.sendToYzj(data)
+    resu = {"success": "true"}
+    return json.dumps(resu, ensure_ascii=False)
+
+
 
 
 if __name__ == '__main__':

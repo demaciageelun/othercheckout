@@ -23,6 +23,8 @@ def login():  # 定义登录函数
 def save(data):
     # 获取表名和数据，写入erp
     print(data)
+    # 供应商类型（从系统选择，还是其他新增进其他往来单位）
+
     # 云之家流程创建人
     creater = data["data"]["basicInfo"]["myPersonInfo"]["name"]
     # 云之家流水号
@@ -30,32 +32,34 @@ def save(data):
     # 其他往来单位信息,可能有多条，需循环
     other_data = data["data"]["formInfo"]["detailMap"]["Dd_1"]["widgetValue"]
     for datas in other_data:
-        ins = {
-            "ValidateFlag": "true",
-            "NumberSearch": "true",
-            "Model": {
-                "FCreateOrgId": {
-                    "FNumber": "100"
-                },
-                "FUseOrgId": {
-                    "FNumber": "100"
-                },
-                "FName": datas["Te_15"],  # 名称
-                "F_good_Text": datas["Te_18"],  # 开户行
-                "F_good_Text1": datas["Te_12"],  # 银行卡号
-                "F_good_Text2": creater,  # 云之家创建人
-                "F_good_Text3": serialid  # 云之家流水号
+        data_type = datas["Ra_8"]
+        if data_type == "AaBaCcDd":
+            ins = {
+                "ValidateFlag": "true",
+                "NumberSearch": "true",
+                "Model": {
+                    "FCreateOrgId": {
+                        "FNumber": "101"
+                    },
+                    "FUseOrgId": {
+                        "FNumber": "101"
+                    },
+                    "FName": datas["Te_15"],  # 名称
+                    "F_good_Text": datas["Te_18"],  # 开户行
+                    "F_good_Text1": datas["Te_12"],  # 银行卡号
+                    "F_good_Text2": creater,  # 云之家创建人
+                    "F_good_Text3": serialid  # 云之家流水号
+                }
             }
-        }
 
-        data = {"FormID": "FIN_OTHERS", "Data": json.dumps(ins)}
-        response = requests.post(url=save_url, data=data, cookies=login())
-        resp_data = json.loads(response.text)
-        try:
-            fnumber = resp_data["Result"]["Number"]
-            subdata = {"Numbers": fnumber}
-            submitData.submitToErp("FIN_OTHERS", subdata)
-            auditData.auditToErp("FIN_OTHERS", subdata)
-        except Exception as s:
-            print(s)
-        print(response.text)
+            data = {"FormID": "FIN_OTHERS", "Data": json.dumps(ins)}
+            response = requests.post(url=save_url, data=data, cookies=login())
+            resp_data = json.loads(response.text)
+            try:
+                fnumber = resp_data["Result"]["Number"]
+                subdata = {"Numbers": fnumber}
+                submitData.submitToErp("FIN_OTHERS", subdata)
+                auditData.auditToErp("FIN_OTHERS", subdata)
+            except Exception as s:
+                print(s)
+            print(response.text)
