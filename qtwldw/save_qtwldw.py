@@ -44,8 +44,8 @@ def save(data):
                     "FUseOrgId": {
                         "FNumber": "101"
                     },
-                    "FName": datas["Te_15"],  # 名称
-                    "F_good_Text": datas["Te_18"],  # 开户行
+                    "FName": datas["Te_6"],  # 名称
+                    "F_good_Text": datas["Te_8"],  # 开户行
                     "F_good_Text1": datas["Te_12"],  # 银行卡号
                     "F_good_Text2": creater,  # 云之家创建人
                     "F_good_Text3": serialid  # 云之家流水号
